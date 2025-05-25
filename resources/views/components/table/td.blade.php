@@ -1,14 +1,14 @@
 @props(['status' => 'normal'])
 
 @php
-    $baseClasses = 'px-6 py-4 whitespace-nowrap text-sm';
+    $baseClasses = 'px-6 py-4 whitespace-nowrap text-sm text-gray-900';
     $statusClasses = [
-        'normal' => 'text-gray-900',
-        'muted' => 'text-gray-500',
-        'success' => 'text-green-600',
-        'danger' => 'text-red-600',
-        'warning' => 'text-yellow-600',
-        'primary' => 'text-indigo-600'
+        'normal' => '',
+        'muted' => 'text-gray-900',
+        'success' => 'text-gray-900',
+        'danger' => 'text-gray-900', 
+        'warning' => 'text-gray-900',
+        'primary' => 'text-gray-900'
     ];
 @endphp
 

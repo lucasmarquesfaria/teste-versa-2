@@ -53,14 +53,14 @@ class RolesAndPermissionsSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::create(['name' => $permission, 'guard_name' => 'web']);
         }
 
         // Criar papéis e atribuir permissões
-        $role = Role::create(['name' => 'admin']);
+        $role = Role::create(['name' => 'admin', 'guard_name' => 'web']);
         $role->givePermissionTo(Permission::all());
         
-        $role = Role::create(['name' => 'fiscal']);
+        $role = Role::create(['name' => 'fiscal', 'guard_name' => 'web']);
         $role->givePermissionTo([
             'instituicao_listar',
             'instituicao_visualizar',
