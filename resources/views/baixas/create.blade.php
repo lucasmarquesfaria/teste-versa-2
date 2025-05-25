@@ -127,12 +127,10 @@
                             option.dataset.numeroFinal = d.numero_final;
                             distribuicaoSelect.appendChild(option);
                         });
-                        if (oldDistribuicaoId > 0) {
+                        if (oldDistribuicaoId > 0 && data.some(d => d.id == oldDistribuicaoId)) {
                             distribuicaoSelect.value = oldDistribuicaoId;
-                            atualizarRangeInfo();
-                        } else {
-                            atualizarRangeInfo();
                         }
+                        atualizarRangeInfo();
                         distribuicaoSelect.disabled = false;
                     })
                     .catch(() => {
