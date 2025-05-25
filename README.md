@@ -48,7 +48,7 @@ Sistema desenvolvido para gerenciar a distribuição e controle de Declarações
 
 1. Clone o repositório
 ```bash
-git clone https://github.com/sua-empresa/versa.git
+git clone https://github.com/lucasmarquesfaria/teste-versa-2
 cd versa
 ```
 
