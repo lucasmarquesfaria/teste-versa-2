@@ -28,7 +28,6 @@
                                 <x-input-label :value="__('Instituição')" />
                                 <p class="mt-1 p-2 border border-gray-200 rounded-md bg-gray-50">{{ $instituicao->nome }}</p>
                             </div>
-                            
                             <div>
                                 <x-input-label :value="__('Tipo de Formulário')" />
                                 <p class="mt-1 p-2 border border-gray-200 rounded-md bg-gray-50">
@@ -39,7 +38,6 @@
                                     @endif
                                 </p>
                             </div>
-                            
                             <div>
                                 <x-input-label :value="__('Faixa de Numeração')" />
                                 <p class="mt-1 p-2 border border-gray-200 rounded-md bg-gray-50">{{ $distribuicao->numero_inicial }} a {{ $distribuicao->numero_final }}</p>
@@ -51,7 +49,6 @@
                                 <x-input-label :value="__('Número da Declaração')" />
                                 <p class="mt-1 p-2 border border-gray-200 rounded-md bg-gray-50">{{ $baixa->numero }}</p>
                             </div>
-                            
                             <div>
                                 <x-input-label for="data_devolucao" :value="__('Data de Devolução')" />
                                 <x-text-input id="data_devolucao" name="data_devolucao" type="date" class="mt-1 block w-full" value="{{ old('data_devolucao', $baixa->data_devolucao->format('Y-m-d')) }}" required />

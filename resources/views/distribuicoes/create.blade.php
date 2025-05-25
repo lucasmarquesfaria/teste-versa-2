@@ -84,7 +84,6 @@
         document.getElementById('numero_inicial').addEventListener('change', function() {
             let numeroInicial = parseInt(this.value);
             let numeroFinalInput = document.getElementById('numero_final');
-            
             if (numeroFinalInput.value === '' || parseInt(numeroFinalInput.value) < numeroInicial) {
                 numeroFinalInput.value = numeroInicial;
             }

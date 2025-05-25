@@ -38,13 +38,11 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
                 <div class="p-6 text-gray-900">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Informações da Distribuição</h3>
-                    
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         <div>
                             <p class="text-sm font-medium text-gray-500">Instituição:</p>
                             <p>{{ $distribuicao->instituicao->nome }}</p>
                         </div>
-                        
                         <div>
                             <p class="text-sm font-medium text-gray-500">Tipo de Formulário:</p>
                             <p>
@@ -55,37 +53,30 @@
                                 @endif
                             </p>
                         </div>
-                        
                         <div>
                             <p class="text-sm font-medium text-gray-500">Numeração:</p>
                             <p>{{ $distribuicao->numero_inicial }} a {{ $distribuicao->numero_final }}</p>
                         </div>
-                        
                         <div>
                             <p class="text-sm font-medium text-gray-500">Data de Entrega:</p>
                             <p>@data($distribuicao->data_entrega)</p>
                         </div>
-                        
                         <div>
                             <p class="text-sm font-medium text-gray-500">Total de Formulários:</p>
                             <p>{{ $distribuicao->total_certidoes }}</p>
                         </div>
-                        
                         <div>
                             <p class="text-sm font-medium text-gray-500">Formulários com Baixa:</p>
                             <p>{{ $distribuicao->quantidade_baixas }}</p>
                         </div>
-                        
                         <div>
                             <p class="text-sm font-medium text-gray-500">Formulários Pendentes:</p>
                             <p>{{ $distribuicao->quantidade_pendentes }}</p>
                         </div>
-
                         <div>
                             <p class="text-sm font-medium text-gray-500">Registrado por:</p>
                             <p>{{ $distribuicao->usuario->name }}</p>
                         </div>
-                        
                         @if($distribuicao->observacao)
                         <div class="md:col-span-2 lg:col-span-4">
                             <p class="text-sm font-medium text-gray-500">Observações:</p>

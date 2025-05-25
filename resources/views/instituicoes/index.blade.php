@@ -5,10 +5,10 @@
                 {{ __('Instituições') }}
             </h2>
             @can('instituicao_criar')
-            <x-primary-button-link href="{{ route('instituicoes.create') }}">
-                <x-icons.plus class="h-4 w-4 mr-1" />
-                {{ __('Nova Instituição') }}
-            </x-primary-button-link>
+                <x-primary-button-link href="{{ route('instituicoes.create') }}">
+                    <x-icons.plus class="h-4 w-4 mr-1" />
+                    {{ __('Nova Instituição') }}
+                </x-primary-button-link>
             @endcan
         </div>
     </x-slot>
@@ -40,23 +40,21 @@
                         <x-table.td>
                             <div class="flex space-x-2">
                                 @can('instituicao_visualizar')
-                                <x-action-link href="{{ route('instituicoes.show', $instituicao) }}" class="text-indigo-600 hover:text-indigo-900">
-                                    Detalhes
-                                </x-action-link>
+                                    <x-action-link href="{{ route('instituicoes.show', $instituicao) }}" class="text-indigo-600 hover:text-indigo-900">
+                                        Detalhes
+                                    </x-action-link>
                                 @endcan
-                                
                                 @can('instituicao_editar')
-                                <x-action-link href="{{ route('instituicoes.edit', $instituicao) }}" class="text-green-600 hover:text-green-900">
-                                    Editar
-                                </x-action-link>
+                                    <x-action-link href="{{ route('instituicoes.edit', $instituicao) }}" class="text-green-600 hover:text-green-900">
+                                        Editar
+                                    </x-action-link>
                                 @endcan
-                                
                                 @can('instituicao_excluir')
-                                <form action="{{ route('instituicoes.destroy', $instituicao) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta instituição?');" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900">Excluir</button>
-                                </form>
+                                    <form action="{{ route('instituicoes.destroy', $instituicao) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta instituição?');" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-900">Excluir</button>
+                                    </form>
                                 @endcan
                             </div>
                         </x-table.td>

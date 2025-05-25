@@ -5,10 +5,10 @@
                 {{ __('Distribuições') }}
             </h2>
             @can('distribuicao_criar')
-            <x-primary-button-link href="{{ route('distribuicoes.create') }}">
-                <x-icons.plus class="h-4 w-4 mr-1" />
-                {{ __('Nova Distribuição') }}
-            </x-primary-button-link>
+                <x-primary-button-link href="{{ route('distribuicoes.create') }}">
+                    <x-icons.plus class="h-4 w-4 mr-1" />
+                    {{ __('Nova Distribuição') }}
+                </x-primary-button-link>
             @endcan
         </div>
     </x-slot>
@@ -87,29 +87,15 @@
                         <x-table.td>
                             <div class="flex space-x-2">
                                 @can('distribuicao_visualizar')
-                                <x-action-link href="{{ route('distribuicoes.show', $distribuicao) }}" class="text-indigo-600 hover:text-indigo-900">
-                                    Visualizar
-                                </x-action-link>
+                                    <x-action-link href="{{ route('distribuicoes.show', $distribuicao) }}" class="text-indigo-600 hover:text-indigo-900">
+                                        Visualizar
+                                    </x-action-link>
                                 @endcan
-                                
+
                                 @can('distribuicao_editar')
-                                <x-action-link href="{{ route('distribuicoes.edit', $distribuicao) }}" class="text-green-600 hover:text-green-900">
-                                    Editar
-                                </x-action-link>
-                                @endcan
-                                
-                                @can('distribuicao_excluir')
-                                <form action="{{ route('distribuicoes.destroy', $distribuicao) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta distribuição?');" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900">Excluir</button>
-                                </form>
-                                @endcan
-                                
-                                @can('baixa_criar')
-                                <x-action-link href="{{ route('baixas.create', ['distribuicao_id' => $distribuicao->id]) }}" class="text-blue-600 hover:text-blue-900">
-                                    Nova Baixa
-                                </x-action-link>
+                                    <x-action-link href="{{ route('distribuicoes.edit', $distribuicao) }}" class="text-green-600 hover:text-green-900">
+                                        Editar
+                                    </x-action-link>
                                 @endcan
                             </div>
                         </x-table.td>

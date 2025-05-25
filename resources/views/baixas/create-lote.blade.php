@@ -24,7 +24,7 @@
 
                         <div>
                             <x-input-label for="instituicao_id" :value="__('Instituição')" />
-                            <select id="instituicao_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
+                            <select id="instituicao_id" name="instituicao_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
                                 <option value="">Selecione uma instituição</option>
                                 @foreach($instituicoes as $instituicao)
                                     <option value="{{ $instituicao->id }}" {{ old('instituicao_id', request('instituicao_id')) == $instituicao->id ? 'selected' : '' }}>
@@ -94,25 +94,19 @@
             const distribuicaoSelect = document.getElementById('distribuicao_id');
             const rangeInfo = document.getElementById('range-info');
             const rangeText = document.getElementById('range-text');
-            
-            // Função para carregar as distribuições com base na instituição selecionada
+            // Carrega distribuições ao selecionar instituição
             function carregarDistribuicoes() {
                 const instituicaoId = instituicaoSelect.value;
                 if (!instituicaoId) {
-                    distribuicaoSelect.innerHTML = '<option value="">Selecione uma distribuição</option>';
+                    distribuicaoSelect.innerHTML = '<option value=\"\">Selecione uma distribuição</option>';
                     return;
                 }
-                
-                // Resetar o select de distribuições
                 distribuicaoSelect.disabled = true;
-                distribuicaoSelect.innerHTML = '<option value="">Carregando...</option>';
-                
-                // Fazer a requisição AJAX para obter as distribuições
+                distribuicaoSelect.innerHTML = '<option value=\"\">Carregando...</option>';
                 fetch(`/distribuicoes/${instituicaoId}/get`)
                     .then(response => response.json())
                     .then(data => {
-                        distribuicaoSelect.innerHTML = '<option value="">Selecione uma distribuição</option>';
-                        
+                        distribuicaoSelect.innerHTML = '<option value=\"\">Selecione uma distribuição</option>';
                         data.forEach(d => {
                             const option = document.createElement('option');
                             option.value = d.id;
@@ -121,35 +115,27 @@
                             option.dataset.numeroFinal = d.numero_final;
                             distribuicaoSelect.appendChild(option);
                         });
-                        
-                        // Verificar se existe um valor anterior selecionado
                         const oldValue = {{ old('distribuicao_id', request('distribuicao_id', 0)) }};
                         if (oldValue > 0) {
                             distribuicaoSelect.value = oldValue;
                             atualizarRangeInfo();
                         }
-                        
                         distribuicaoSelect.disabled = false;
                     })
-                    .catch(error => {
-                        console.error('Erro ao carregar distribuições:', error);
-                        distribuicaoSelect.innerHTML = '<option value="">Erro ao carregar</option>';
+                    .catch(() => {
+                        distribuicaoSelect.innerHTML = '<option value=\"\">Erro ao carregar</option>';
                         distribuicaoSelect.disabled = false;
                     });
             }
-            
-            // Função para atualizar a informação de range
+            // Atualiza faixa de numeração
             function atualizarRangeInfo() {
                 const selectedOption = distribuicaoSelect.options[distribuicaoSelect.selectedIndex];
-                
                 if (selectedOption && selectedOption.value) {
                     const numeroInicial = selectedOption.dataset.numeroInicial;
                     const numeroFinal = selectedOption.dataset.numeroFinal;
-                    
                     if (numeroInicial && numeroFinal) {
                         rangeText.textContent = `${numeroInicial} a ${numeroFinal}`;
                         rangeInfo.classList.remove('hidden');
-                        
                         // Sugerir intervalo completo no campo de números se estiver vazio
                         const numerosTextarea = document.getElementById('numeros');
                         if (!numerosTextarea.value.trim()) {
@@ -162,12 +148,8 @@
                     rangeInfo.classList.add('hidden');
                 }
             }
-            
-            // Inicializar eventos
             instituicaoSelect.addEventListener('change', carregarDistribuicoes);
             distribuicaoSelect.addEventListener('change', atualizarRangeInfo);
-            
-            // Se já houver uma instituição selecionada, carregar as distribuições
             if (instituicaoSelect.value) {
                 carregarDistribuicoes();
             }

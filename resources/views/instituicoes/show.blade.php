@@ -36,17 +36,14 @@
                                 <p class="text-sm font-medium text-gray-500">Nome:</p>
                                 <p>{{ $instituicao->nome }}</p>
                             </div>
-                            
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Endereço:</p>
                                 <p>{{ $instituicao->endereco ?: 'Não informado' }}</p>
                             </div>
-                            
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Telefone:</p>
                                 <p>{{ $instituicao->telefone ?: 'Não informado' }}</p>
                             </div>
-                            
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Email:</p>
                                 <p>{{ $instituicao->email ?: 'Não informado' }}</p>

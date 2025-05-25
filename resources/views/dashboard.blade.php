@@ -9,7 +9,6 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Cards de Indicadores (KPIs) -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <!-- Card 1: Instituições -->
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-gray-700 mb-1">Instituições</h3>
@@ -17,8 +16,6 @@
                         <p class="text-sm text-gray-500 mt-2">Total de instituições cadastradas</p>
                     </div>
                 </div>
-                
-                <!-- Card 2: Distribuições -->
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-gray-700 mb-1">Distribuições</h3>
@@ -29,8 +26,6 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Card 3: Baixas -->
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-gray-700 mb-1">Baixas</h3>
@@ -42,8 +37,6 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Card 4: Pendências -->
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-gray-700 mb-1">Pendências</h3>

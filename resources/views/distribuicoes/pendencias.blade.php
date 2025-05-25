@@ -25,7 +25,6 @@
                         @endforeach
                     </x-select-input>
                 </div>
-
                 <div>
                     <x-input-label for="tipo_certidao" :value="__('Tipo de Formulário')" />
                     <x-select-input id="tipo_certidao" name="tipo_certidao" class="mt-1 block w-full">
@@ -34,12 +33,10 @@
                         <option value="nascidos_vivos" @selected(request('tipo_certidao') == 'nascidos_vivos')>Declaração de Nascidos Vivos (DNV)</option>
                     </x-select-input>
                 </div>
-
                 <div>
                     <x-input-label for="data_inicio" :value="__('Data Início')" />
                     <x-date-input id="data_inicio" name="data_inicio" :value="request('data_inicio')" class="mt-1 block w-full" />
                 </div>
-
                 <div>
                     <x-input-label for="data_fim" :value="__('Data Fim')" />
                     <x-date-input id="data_fim" name="data_fim" :value="request('data_fim')" class="mt-1 block w-full" />

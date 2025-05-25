@@ -26,7 +26,6 @@
                                     @endforeach
                                 </select>
                             </div>
-                            
                             <div>
                                 <x-input-label for="distribuicao_tipo_certidao" :value="__('Tipo de Formulário')" />
                                 <select id="distribuicao_tipo_certidao" name="tipo_certidao" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
@@ -35,19 +34,16 @@
                                     <option value="nascidos_vivos">Declaração de Nascidos Vivos (DNV)</option>
                                 </select>
                             </div>
-                            
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <x-input-label for="distribuicao_data_inicio" :value="__('Data Início')" />
                                     <x-text-input id="distribuicao_data_inicio" name="data_inicio" type="date" class="mt-1 block w-full" />
                                 </div>
-                                
                                 <div>
                                     <x-input-label for="distribuicao_data_fim" :value="__('Data Fim')" />
                                     <x-text-input id="distribuicao_data_fim" name="data_fim" type="date" class="mt-1 block w-full" />
                                 </div>
                             </div>
-                            
                             <div>
                                 <x-input-label for="distribuicao_tipo_saida" :value="__('Formato de Saída')" />
                                 <div class="mt-1 flex space-x-4">
@@ -61,7 +57,6 @@
                                     </label>
                                 </div>
                             </div>
-                            
                             <div>
                                 <x-primary-button type="submit">
                                     {{ __('Gerar Relatório') }}
@@ -89,7 +84,6 @@
                                     @endforeach
                                 </select>
                             </div>
-                            
                             <div>
                                 <x-input-label for="utilizacao_tipo_certidao" :value="__('Tipo de Formulário')" />
                                 <select id="utilizacao_tipo_certidao" name="tipo_certidao" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
@@ -98,7 +92,6 @@
                                     <option value="nascidos_vivos">Declaração de Nascidos Vivos (DNV)</option>
                                 </select>
                             </div>
-                            
                             <div>
                                 <x-input-label for="utilizacao_situacao" :value="__('Situação')" />
                                 <select id="utilizacao_situacao" name="situacao" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
@@ -108,19 +101,16 @@
                                     <option value="nao_utilizada">Não Utilizadas</option>
                                 </select>
                             </div>
-                            
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <x-input-label for="utilizacao_data_inicio" :value="__('Data Início')" />
                                     <x-text-input id="utilizacao_data_inicio" name="data_inicio" type="date" class="mt-1 block w-full" />
                                 </div>
-                                
                                 <div>
                                     <x-input-label for="utilizacao_data_fim" :value="__('Data Fim')" />
                                     <x-text-input id="utilizacao_data_fim" name="data_fim" type="date" class="mt-1 block w-full" />
                                 </div>
                             </div>
-                            
                             <div>
                                 <x-input-label for="utilizacao_tipo_saida" :value="__('Formato de Saída')" />
                                 <div class="mt-1 flex space-x-4">
@@ -134,7 +124,6 @@
                                     </label>
                                 </div>
                             </div>
-                            
                             <div>
                                 <x-primary-button type="submit">
                                     {{ __('Gerar Relatório') }}
@@ -162,7 +151,6 @@
                                     @endforeach
                                 </select>
                             </div>
-                            
                             <div>
                                 <x-input-label for="pendencias_tipo_certidao" :value="__('Tipo de Formulário')" />
                                 <select id="pendencias_tipo_certidao" name="tipo_certidao" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
@@ -171,19 +159,16 @@
                                     <option value="nascidos_vivos">Declaração de Nascidos Vivos (DNV)</option>
                                 </select>
                             </div>
-                            
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <x-input-label for="pendencias_data_inicio" :value="__('Data Início')" />
                                     <x-text-input id="pendencias_data_inicio" name="data_inicio" type="date" class="mt-1 block w-full" />
                                 </div>
-                                
                                 <div>
                                     <x-input-label for="pendencias_data_fim" :value="__('Data Fim')" />
                                     <x-text-input id="pendencias_data_fim" name="data_fim" type="date" class="mt-1 block w-full" />
                                 </div>
                             </div>
-                            
                             <div>
                                 <x-input-label for="pendencias_tipo_saida" :value="__('Formato de Saída')" />
                                 <div class="mt-1 flex space-x-4">
@@ -197,7 +182,6 @@
                                     </label>
                                 </div>
                             </div>
-                            
                             <div>
                                 <x-primary-button type="submit">
                                     {{ __('Gerar Relatório') }}

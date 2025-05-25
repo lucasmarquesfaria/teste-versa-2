@@ -29,13 +29,11 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Informações da Baixa</h3>
-                    
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                         <div>
                             <p class="text-sm font-medium text-gray-500">Instituição:</p>
                             <p>{{ $baixa->distribuicao->instituicao->nome }}</p>
                         </div>
-                        
                         <div>
                             <p class="text-sm font-medium text-gray-500">Tipo de Formulário:</p>
                             <p>
@@ -46,56 +44,42 @@
                                 @endif
                             </p>
                         </div>
-                        
                         <div>
                             <p class="text-sm font-medium text-gray-500">Faixa da Distribuição:</p>
                             <p>{{ $baixa->distribuicao->numero_inicial }} a {{ $baixa->distribuicao->numero_final }}</p>
                         </div>
-                        
                         <div>
                             <p class="text-sm font-medium text-gray-500">Número da Declaração:</p>
                             <p class="font-semibold text-lg">{{ $baixa->numero }}</p>
                         </div>
-                        
                         <div>
                             <p class="text-sm font-medium text-gray-500">Data de Devolução:</p>
                             <p>@data($baixa->data_devolucao)</p>
                         </div>
-                        
                         <div>
                             <p class="text-sm font-medium text-gray-500">Situação:</p>
                             <p>
                                 @if($baixa->situacao == 'utilizada')
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        Utilizada
-                                    </span>
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Utilizada</span>
                                 @elseif($baixa->situacao == 'cancelada')
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                        Cancelada
-                                    </span>
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Cancelada</span>
                                 @else
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                                        Não Utilizada
-                                    </span>
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Não Utilizada</span>
                                 @endif
                             </p>
                         </div>
-                        
                         <div>
                             <p class="text-sm font-medium text-gray-500">Registrado por:</p>
                             <p>{{ $baixa->usuario->name }}</p>
                         </div>
-                        
                         <div>
                             <p class="text-sm font-medium text-gray-500">Data de Registro:</p>
                             <p>{{ $baixa->created_at->format('d/m/Y H:i') }}</p>
                         </div>
-                        
                         <div>
                             <p class="text-sm font-medium text-gray-500">Última Atualização:</p>
                             <p>{{ $baixa->updated_at->format('d/m/Y H:i') }}</p>
                         </div>
-                        
                         @if($baixa->observacao)
                         <div class="md:col-span-2 lg:col-span-3">
                             <p class="text-sm font-medium text-gray-500">Observações:</p>
