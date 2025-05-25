@@ -54,6 +54,13 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
         
+        // Buscar distribuições com pendências vencidas (prazo limite expirado)
+        $distribuicoesPendentesVencidas = Distribuicao::with('instituicao', 'baixas')
+            ->get()
+            ->filter(function($d) {
+                return count($d->numeros_pendentes) > 0 && now()->gt($d->data_limite_baixa);
+            });
+        
         return view('dashboard', compact(
             'totalInstituicoes',
             'totalDistribuicoes',
@@ -61,7 +68,8 @@ class DashboardController extends Controller
             'totalCertidoes',
             'totalPendencias',
             'distribuicoesRecentes',
-            'baixasRecentes'
+            'baixasRecentes',
+            'distribuicoesPendentesVencidas'
         ));
     }
 }

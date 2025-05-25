@@ -89,4 +89,26 @@ class Distribuicao extends Model
     {
         return $this->total_certidoes - $this->quantidade_baixas;
     }
+
+    /**
+     * Números de declarações ainda não devolvidas (pendentes) desta distribuição.
+     * Uso: $distribuicao->numeros_pendentes
+     * @return array
+     */
+    public function getNumerosPendentesAttribute()
+    {
+        $todos = range($this->numero_inicial, $this->numero_final);
+        $baixados = $this->baixas->pluck('numero')->toArray();
+        return array_values(array_diff($todos, $baixados));
+    }
+    
+    /**
+     * Retorna a data limite para devolução (baixa) desta distribuição.
+     * Por padrão, 30 dias após a data_entrega.
+     */
+    public function getDataLimiteBaixaAttribute()
+    {
+        $prazoDias = 30; // Pode ser tornado configurável
+        return $this->data_entrega ? $this->data_entrega->copy()->addDays($prazoDias) : null;
+    }
 }

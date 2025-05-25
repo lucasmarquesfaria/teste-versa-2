@@ -27,7 +27,7 @@
                             <select id="instituicao_id" name="instituicao_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
                                 <option value="">Selecione uma instituição</option>
                                 @foreach($instituicoes as $instituicao)
-                                    <option value="{{ $instituicao->id }}" {{ old('instituicao_id', request('instituicao_id')) == $instituicao->id ? 'selected' : '' }}>
+                                    <option value="{{ $instituicao->id }}" {{ (old('instituicao_id', request('instituicao_id', optional($instituicaoSelecionada)->id)) == $instituicao->id) ? 'selected' : '' }}>
                                         {{ $instituicao->nome }}
                                     </option>
                                 @endforeach

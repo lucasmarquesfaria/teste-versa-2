@@ -30,6 +30,16 @@ class RelatorioController extends Controller
     {
         $this->authorize('relatorio_gerar');
         
+        // Validação das datas
+        $request->validate([
+            'data_inicio' => 'required|date',
+            'data_fim' => 'required|date|after_or_equal:data_inicio',
+        ], [
+            'data_inicio.required' => 'A data inicial é obrigatória.',
+            'data_fim.required' => 'A data final é obrigatória.',
+            'data_fim.after_or_equal' => 'A data final deve ser igual ou posterior à data inicial.'
+        ]);
+        
         $query = Distribuicao::with('instituicao');
         
         // Aplicar filtros
@@ -86,6 +96,16 @@ class RelatorioController extends Controller
     public function utilizacao(Request $request)
     {
         $this->authorize('relatorio_gerar');
+        
+        // Validação das datas
+        $request->validate([
+            'data_inicio' => 'required|date',
+            'data_fim' => 'required|date|after_or_equal:data_inicio',
+        ], [
+            'data_inicio.required' => 'A data inicial é obrigatória.',
+            'data_fim.required' => 'A data final é obrigatória.',
+            'data_fim.after_or_equal' => 'A data final deve ser igual ou posterior à data inicial.'
+        ]);
         
         $query = Baixa::with(['distribuicao', 'distribuicao.instituicao']);
         
@@ -156,6 +176,16 @@ class RelatorioController extends Controller
     {
         $this->authorize('relatorio_gerar');
         
+        // Validação das datas
+        $request->validate([
+            'data_inicio' => 'required|date',
+            'data_fim' => 'required|date|after_or_equal:data_inicio',
+        ], [
+            'data_inicio.required' => 'A data inicial é obrigatória.',
+            'data_fim.required' => 'A data final é obrigatória.',
+            'data_fim.after_or_equal' => 'A data final deve ser igual ou posterior à data inicial.'
+        ]);
+        
         $query = Distribuicao::with('instituicao')
             ->withCount('baixas');
         
@@ -225,6 +255,16 @@ class RelatorioController extends Controller
     {
         $this->authorize('relatorio_gerar');
         
+        // Validação das datas
+        $request->validate([
+            'dataInicial' => 'required|date',
+            'dataFinal' => 'required|date|after_or_equal:dataInicial',
+        ], [
+            'dataInicial.required' => 'A data inicial é obrigatória.',
+            'dataFinal.required' => 'A data final é obrigatória.',
+            'dataFinal.after_or_equal' => 'A data final deve ser igual ou posterior à data inicial.'
+        ]);
+        
         $query = Baixa::with(['distribuicao.instituicao', 'usuario'])
             ->where('situacao', 'utilizada');
             
@@ -235,8 +275,8 @@ class RelatorioController extends Controller
             });
         }
             
-        if ($request->filled('data_inicial') && $request->filled('data_final')) {
-            $query->whereBetween('data_devolucao', [$request->data_inicial, $request->data_final]);
+        if ($request->filled('dataInicial') && $request->filled('dataFinal')) {
+            $query->whereBetween('data_devolucao', [$request->dataInicial, $request->dataFinal]);
         }
             
         $baixas = $query->orderBy('data_devolucao')->get();
@@ -246,8 +286,8 @@ class RelatorioController extends Controller
         
         $pdf = Pdf::loadView('relatorios.pdf.vendas', [
             'baixas' => $baixasAgrupadas,
-            'dataInicial' => $request->data_inicial,
-            'dataFinal' => $request->data_final
+            'dataInicial' => $request->dataInicial,
+            'dataFinal' => $request->dataFinal
         ]);
         
         return $pdf->stream('relatorio-vendas.pdf');

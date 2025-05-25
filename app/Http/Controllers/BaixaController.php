@@ -57,14 +57,31 @@ class BaixaController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         $this->authorize('baixa_criar');
-        
-        $instituicoes = Instituicao::orderBy('nome')->get();
-        $distribuicoes = collect(); // Coleção vazia inicial
-        
-        return view('baixas.create', compact('instituicoes', 'distribuicoes'));
+
+        $instituicoes = \App\Models\Instituicao::orderBy('nome')->get();
+        $distribuicoes = collect();
+        $instituicaoSelecionada = null;
+
+        // Se veio distribuicao_id na query, pré-seleciona a instituição e carrega as distribuições dela
+        if ($request->filled('distribuicao_id')) {
+            $distribuicao = \App\Models\Distribuicao::with('instituicao')->find($request->distribuicao_id);
+            if ($distribuicao) {
+                $instituicaoSelecionada = $distribuicao->instituicao;
+                $distribuicoes = \App\Models\Distribuicao::where('instituicao_id', $instituicaoSelecionada->id)->orderBy('data_entrega', 'desc')->get();
+            }
+        } else {
+            // Se não veio distribuicao_id, carrega todas as distribuições para o select
+            $distribuicoes = \App\Models\Distribuicao::with('instituicao')->orderBy('data_entrega', 'desc')->get();
+        }
+
+        return view('baixas.create', [
+            'instituicoes' => $instituicoes,
+            'distribuicoes' => $distribuicoes,
+            'instituicaoSelecionada' => $instituicaoSelecionada,
+        ]);
     }
     
     /**
@@ -105,6 +122,16 @@ class BaixaController extends Controller
         
         // Buscar a distribuição
         $distribuicao = Distribuicao::findOrFail($request->distribuicao_id);
+
+        // --- Validação de prazo limite para devolução ---
+        $prazoDias = 30; // Pode ser tornado configurável
+        $dataLimite = $distribuicao->data_entrega->copy()->addDays($prazoDias);
+        if (\Carbon\Carbon::parse($request->data_devolucao)->gt($dataLimite)) {
+            return back()
+                ->withInput()
+                ->withErrors(['data_devolucao' => 'A data de devolução excede o prazo limite de ' . $prazoDias . ' dias após a entrega da distribuição.']);
+        }
+        // --- Fim da validação de prazo ---
         
         // Verificar se o número está dentro da faixa da distribuição
         if ($request->numero < $distribuicao->numero_inicial || $request->numero > $distribuicao->numero_final) {
@@ -228,6 +255,16 @@ class BaixaController extends Controller
         
         // Buscar a distribuição
         $distribuicao = Distribuicao::findOrFail($request->distribuicao_id);
+
+        // --- Validação de prazo limite para devolução (lote) ---
+        $prazoDias = 30; // Pode ser tornado configurável
+        $dataLimite = $distribuicao->data_entrega->copy()->addDays($prazoDias);
+        if (\Carbon\Carbon::parse($request->data_devolucao)->gt($dataLimite)) {
+            return back()
+                ->withInput()
+                ->withErrors(['data_devolucao' => 'A data de devolução excede o prazo limite de ' . $prazoDias . ' dias após a entrega da distribuição.']);
+        }
+        // --- Fim da validação de prazo ---
         
         // Processar a string de números
         $numeros = $this->processarNumerosLote($request->numeros);

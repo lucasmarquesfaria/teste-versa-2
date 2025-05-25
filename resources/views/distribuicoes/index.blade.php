@@ -46,6 +46,12 @@
                     <x-input-label for="data_fim" :value="__('Data Fim')" />
                     <x-date-input id="data_fim" name="data_fim" :value="request('data_fim')" class="mt-1 block w-full" />
                 </div>
+
+                <div>
+                    <x-input-label for="pendentes" :value="__('Apenas Pendentes de Devolução')" />
+                    <input type="checkbox" id="pendentes" name="pendentes" value="1" class="mt-1 mr-2 align-middle" {{ request('pendentes') ? 'checked' : '' }} onchange="this.form.submit()">
+                    <span class="text-sm text-gray-600">Exibir apenas distribuições com pendências</span>
+                </div>
             </x-page-filter-panel>
         </x-slot>
 
@@ -96,6 +102,11 @@
                                     <x-action-link href="{{ route('distribuicoes.edit', $distribuicao) }}" class="text-green-600 hover:text-green-900">
                                         Editar
                                     </x-action-link>
+                                @endcan
+
+                                @can('baixa_criar')
+                                    <x-action-link href="{{ route('baixas.create', ['distribuicao_id' => $distribuicao->id]) }}" class="text-blue-600 hover:text-blue-900">Registrar Devolução</x-action-link>
+                                    <x-action-link href="{{ route('baixas.create-lote', ['distribuicao_id' => $distribuicao->id]) }}" class="text-cyan-600 hover:text-cyan-900">Devolução em Lote</x-action-link>
                                 @endcan
                             </div>
                         </x-table.td>

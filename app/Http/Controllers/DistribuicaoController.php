@@ -37,6 +37,13 @@ class DistribuicaoController extends Controller
             $distribuicoes->whereDate('data_entrega', '<=', request('data_fim'));
         }
         
+        // Filtro: apenas distribuições pendentes de devolução
+        if (request()->has('pendentes') && request('pendentes')) {
+            $distribuicoes = $distribuicoes->where(function($q) {
+                return $q->quantidade_pendentes > 0;
+            });
+        }
+        
         $instituicoes = Instituicao::orderBy('nome')->get();
         $distribuicoes = $distribuicoes->orderBy('data_entrega', 'desc')->paginate(10);
         

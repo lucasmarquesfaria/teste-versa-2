@@ -104,7 +104,11 @@
                                                         @endcan
                                                         
                                                         @can('baixa_criar')
-                                                        <a href="{{ route('baixas.create', ['distribuicao_id' => $distribuicao->id]) }}" class="text-green-600 hover:text-green-900">Nova Baixa</a>
+                                                        <a href="{{ route('baixas.create', ['distribuicao_id' => $distribuicao->id]) }}" class="text-blue-600 hover:text-blue-900">Registrar Devolução</a>
+                                                        @endcan
+                                                        
+                                                        @can('baixa_criar')
+                                                        <a href="{{ route('baixas.create-lote', ['distribuicao_id' => $distribuicao->id]) }}" class="text-cyan-600 hover:text-cyan-900">Devolução em Lote</a>
                                                         @endcan
                                                     </div>
                                                 </td>
@@ -116,6 +120,54 @@
                         @else
                             <p class="text-gray-500">Nenhuma distribuição registrada para esta instituição.</p>
                         @endif
+                    </div>
+
+                    <div class="mt-10">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Declarações Não Devolvidas</h3>
+                        <form method="GET" class="mb-4 flex flex-wrap gap-2 items-end">
+                            <div>
+                                <label for="tipo_certidao" class="block text-xs font-medium text-gray-600">Tipo de Certidão</label>
+                                <select name="tipo_certidao" id="tipo_certidao" class="mt-1 block border-gray-300 rounded shadow-sm">
+                                    <option value="">Todas</option>
+                                    <option value="obito" {{ request('tipo_certidao') == 'obito' ? 'selected' : '' }}>Óbito (DO)</option>
+                                    <option value="nascidos_vivos" {{ request('tipo_certidao') == 'nascidos_vivos' ? 'selected' : '' }}>Nascidos Vivos (DNV)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="pendentes" class="block text-xs font-medium text-gray-600">Status</label>
+                                <select name="pendentes" id="pendentes" class="mt-1 block border-gray-300 rounded shadow-sm">
+                                    <option value="">Todas</option>
+                                    <option value="1" {{ request('pendentes') === '1' ? 'selected' : '' }}>Apenas com pendentes</option>
+                                    <option value="0" {{ request('pendentes') === '0' ? 'selected' : '' }}>Apenas totalmente baixadas</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="inline-flex items-center px-3 py-1 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">Filtrar</button>
+                        </form>
+                        @php
+                            $distribuicoesFiltradas = $instituicao->distribuicoes->filter(function($d) {
+                                if(request('tipo_certidao') && $d->tipo_certidao !== request('tipo_certidao')) return false;
+                                if(request('pendentes') === '1' && count($d->numeros_pendentes) === 0) return false;
+                                if(request('pendentes') === '0' && count($d->numeros_pendentes) > 0) return false;
+                                return true;
+                            });
+                        @endphp
+                        @forelse($distribuicoesFiltradas as $distribuicao)
+                            <div class="mb-4 p-4 bg-gray-50 rounded border">
+                                <div class="mb-2 font-semibold">
+                                    {{ $distribuicao->tipo_certidao == 'obito' ? 'DO' : 'DNV' }} - {{ $distribuicao->numero_inicial }} a {{ $distribuicao->numero_final }} ({{ $distribuicao->data_entrega->format('d/m/Y') }})
+                                </div>
+                                @if(count($distribuicao->numeros_pendentes) > 0)
+                                    <div class="text-sm text-gray-700">
+                                        <span class="font-medium">Números pendentes:</span>
+                                        <span class="break-all">{{ implode(', ', $distribuicao->numeros_pendentes) }}</span>
+                                    </div>
+                                @else
+                                    <div class="text-green-700 text-sm">Todos os formulários foram devolvidos.</div>
+                                @endif
+                            </div>
+                        @empty
+                            <p class="text-gray-500">Nenhuma distribuição encontrada com os filtros selecionados.</p>
+                        @endforelse
                     </div>
                 </div>
             </div>
