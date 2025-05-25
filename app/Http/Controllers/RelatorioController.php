@@ -61,6 +61,11 @@ class RelatorioController extends Controller
         
         $distribuicoes = $query->orderBy('data_entrega', 'desc')->get();
         
+        // Verificar se existem dados para o relatório
+        if ($distribuicoes->isEmpty()) {
+            return redirect()->back()->with('info', 'Não foram encontrados dados para gerar o relatório no período selecionado.');
+        }
+        
         // Agrupar por instituição para o relatório
         $distribuicoesAgrupadas = $distribuicoes->groupBy('instituicao.nome');
         
@@ -79,6 +84,13 @@ class RelatorioController extends Controller
             'totalDistribuicoes' => $totalDistribuicoes,
             'totalFormularios' => $totalFormularios,
         ];
+        
+        // Verificar o formato de saída
+        $request->validate([
+            'tipo_saida' => 'required|in:visualizar,baixar',
+        ], [
+            'tipo_saida.in' => 'O formato de saída selecionado é inválido.'
+        ]);
         
         // Verificar se é para exibir ou baixar o PDF
         if ($request->tipo_saida === 'visualizar') {
@@ -136,6 +148,11 @@ class RelatorioController extends Controller
         
         $baixas = $query->orderBy('data_devolucao', 'desc')->get();
         
+        // Verificar se existem dados para o relatório
+        if ($baixas->isEmpty()) {
+            return redirect()->back()->with('info', 'Não foram encontrados dados para gerar o relatório no período selecionado.');
+        }
+        
         // Agrupar por instituição e situação para o relatório
         $baixasAgrupadas = $baixas->groupBy('distribuicao.instituicao.nome')
             ->map(function ($grupo) {
@@ -158,6 +175,13 @@ class RelatorioController extends Controller
             'baixasAgrupadas' => $baixasAgrupadas,
             'totais' => $totais,
         ];
+        
+        // Verificar o formato de saída
+        $request->validate([
+            'tipo_saida' => 'required|in:visualizar,baixar',
+        ], [
+            'tipo_saida.in' => 'O formato de saída selecionado é inválido.'
+        ]);
         
         // Verificar se é para exibir ou baixar o PDF
         if ($request->tipo_saida === 'visualizar') {
@@ -237,6 +261,13 @@ class RelatorioController extends Controller
             'totalDistribuicoes' => $totalDistribuicoes,
             'totalPendencias' => $totalPendencias,
         ];
+        
+        // Validar o formato de saída
+        $request->validate([
+            'tipo_saida' => 'required|in:visualizar,baixar',
+        ], [
+            'tipo_saida.in' => 'O formato de saída selecionado é inválido.'
+        ]);
         
         // Verificar se é para exibir ou baixar o PDF
         if ($request->tipo_saida === 'visualizar') {

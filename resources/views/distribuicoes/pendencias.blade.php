@@ -41,83 +41,92 @@
                     <x-input-label for="data_fim" :value="__('Data Fim')" />
                     <x-date-input id="data_fim" name="data_fim" :value="request('data_fim')" class="mt-1 block w-full" />
                 </div>
-            </x-page-filter-panel>
-        </x-slot>
+            </x-page-filter-panel>        </x-slot>
 
         <x-slot name="alertas">
-            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        <x-icons.exclamation class="h-5 w-5 text-yellow-400" />
-                    </div>
-                    <div class="ml-3">
-                        <h3 class="text-sm font-medium text-yellow-800">
-                            Resumo de Pendências
-                        </h3>
-                        <div class="mt-2 text-sm text-yellow-700">
-                            <p>Total de distribuições com pendências: <span class="font-bold">{{ $distribuicoes->count() }}</span></p>
-                            <p>Total de formulários pendentes: <span class="font-bold">{{ $distribuicoes->sum('quantidade_pendentes') }}</span></p>
+            @if(!$distribuicoes->isEmpty())
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <x-icons.exclamation class="h-5 w-5 text-yellow-400" />
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-yellow-800">
+                                Resumo de Pendências
+                            </h3>
+                            <div class="mt-2 text-sm text-yellow-700">
+                                <p>Total de distribuições com pendências: <span class="font-bold">{{ $distribuicoes->count() }}</span></p>
+                                <p>Total de formulários pendentes: <span class="font-bold">{{ $distribuicoes->sum('quantidade_pendentes') }}</span></p>
+                            </div>
                         </div>
                     </div>
                 </div>
+            @endif        </x-slot>
+        
+        @if($distribuicoes->isEmpty())
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-center text-gray-700">
+                    <h3 class="text-lg font-semibold">Nenhuma pendência encontrada</h3>
+                    <p class="mt-2">Todas as declarações distribuídas foram devolvidas.</p>
+                </div>
             </div>
-        </x-slot>
+        @else
+            <x-data-table :data="$distribuicoes">
+                <x-slot name="header">
+                    <x-table.th label="Instituição" />
+                    <x-table.th label="Tipo" />
+                    <x-table.th label="Numeração" />
+                    <x-table.th label="Data Entrega" />
+                    <x-table.th label="Total" />
+                    <x-table.th label="Pendentes" />
+                    <x-table.th label="Ações" />
+                </x-slot>
 
-        <x-data-table :data="$distribuicoes">
-            <x-slot name="header">
-                <x-table.th label="Instituição" />
-                <x-table.th label="Tipo" />
-                <x-table.th label="Numeração" />
-                <x-table.th label="Data Entrega" />
-                <x-table.th label="Total" />
-                <x-table.th label="Pendentes" />
-                <x-table.th label="Ações" />
-            </x-slot>
-
-            <x-slot name="row">
-                @foreach($distribuicoes as $distribuicao)
-                    <tr>
-                        <x-table.td>{{ $distribuicao->instituicao->nome }}</x-table.td>
-                        <x-table.td>
-                            @if($distribuicao->tipo_certidao == 'obito')
-                                <x-status-badge type="info">DO</x-status-badge>
-                            @else
-                                <x-status-badge type="info">DNV</x-status-badge>
-                            @endif
-                        </x-table.td>
-                        <x-table.td>{{ $distribuicao->numero_inicial }} a {{ $distribuicao->numero_final }}</x-table.td>
-                        <x-table.td>@data($distribuicao->data_entrega)</x-table.td>
-                        <x-table.td>{{ $distribuicao->total_certidoes }}</x-table.td>
-                        <x-table.td status="danger">
-                            {{ $distribuicao->quantidade_pendentes }}
-                            <span class="text-xs text-gray-500">
-                                ({{ number_format(($distribuicao->quantidade_pendentes / $distribuicao->total_certidoes) * 100, 1) }}%)
-                            </span>
-                        </x-table.td>
-                        <x-table.td>
-                            <div class="flex space-x-2">
-                                @can('distribuicao_visualizar')
-                                <x-action-link href="{{ route('distribuicoes.show', $distribuicao) }}" class="text-indigo-600 hover:text-indigo-900">
-                                    Detalhes
-                                </x-action-link>
-                                @endcan
-                                
-                                @can('baixa_criar')
-                                <x-action-link href="{{ route('baixas.create', ['distribuicao_id' => $distribuicao->id]) }}" class="text-green-600 hover:text-green-900">
-                                    Nova Baixa
-                                </x-action-link>
-                                @endcan
-                                
-                                @can('baixa_criar')
-                                <x-action-link href="{{ route('baixas.create-lote', ['distribuicao_id' => $distribuicao->id]) }}" class="text-blue-600 hover:text-blue-900">
-                                    Baixa em Lote
-                                </x-action-link>
-                                @endcan
-                            </div>
+                <x-slot name="row">
+                    @foreach($distribuicoes as $distribuicao)
+                        <tr>
+                            <x-table.td>{{ $distribuicao->instituicao->nome }}</x-table.td>
+                            <x-table.td>
+                                @if($distribuicao->tipo_certidao == 'obito')
+                                    <x-status-badge type="info">DO</x-status-badge>
+                                @else
+                                    <x-status-badge type="info">DNV</x-status-badge>
+                                @endif
+                            </x-table.td>
+                            <x-table.td>{{ $distribuicao->numero_inicial }} a {{ $distribuicao->numero_final }}</x-table.td>
+                            <x-table.td>@data($distribuicao->data_entrega)</x-table.td>
+                            <x-table.td>{{ $distribuicao->total_certidoes }}</x-table.td>
+                            <x-table.td status="danger">
+                                {{ $distribuicao->quantidade_pendentes }}
+                                <span class="text-xs text-gray-500">
+                                    ({{ number_format(($distribuicao->quantidade_pendentes / $distribuicao->total_certidoes) * 100, 1) }}%)
+                                </span>
+                            </x-table.td>
+                            <x-table.td>
+                                <div class="flex space-x-2">
+                                    @can('distribuicao_visualizar')
+                                    <x-action-link href="{{ route('distribuicoes.show', $distribuicao) }}" class="text-indigo-600 hover:text-indigo-900">
+                                        Detalhes
+                                    </x-action-link>
+                                    @endcan
+                                    
+                                    @can('baixa_criar')
+                                    <x-action-link href="{{ route('baixas.create', ['distribuicao_id' => $distribuicao->id]) }}" class="text-green-600 hover:text-green-900">
+                                        Nova Baixa
+                                    </x-action-link>
+                                    @endcan
+                                    
+                                    @can('baixa_criar')
+                                    <x-action-link href="{{ route('baixas.create-lote', ['distribuicao_id' => $distribuicao->id]) }}" class="text-blue-600 hover:text-blue-900">
+                                        Baixa em Lote
+                                    </x-action-link>
+                                    @endcan
+                                </div>
                         </x-table.td>
                     </tr>
                 @endforeach
             </x-slot>
         </x-data-table>
+        @endif
     </x-layouts.main-page>
 </x-app-layout>

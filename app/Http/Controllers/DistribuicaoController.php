@@ -93,7 +93,10 @@ class DistribuicaoController extends Controller
         if ($sobreposicao) {
             return back()
                 ->withInput()
-                ->withErrors(['numero_inicial' => 'Há sobreposição com a numeração de outra distribuição.']);
+                ->withErrors([
+                    'numero_inicial' => 'Há sobreposição com a numeração de outra distribuição.',
+                    'numero_final' => 'Há sobreposição com a numeração de outra distribuição.'
+                ]);
         }
         
         // Adicionar o usuário logado
@@ -217,33 +220,42 @@ class DistribuicaoController extends Controller
     /**
      * Listar pendências (numerações sem baixa)
      */
-    public function pendencias()
+    public function pendencias(Request $request)
     {
         $this->authorize('distribuicao_listar');
         
-        $distribuicoes = Distribuicao::with('instituicao')
-            ->withCount('baixas')
-            ->get()
-            ->filter(function ($distribuicao) {
-                // Calcular quantos números existem na faixa
-                $totalNumeracao = ($distribuicao->numero_final - $distribuicao->numero_inicial) + 1;
-                // Filtrar apenas os que têm pendências
-                return $distribuicao->baixas_count < $totalNumeracao;
-            });
+        // Validação dos filtros de data
+        if ($request->filled('data_inicio') && $request->filled('data_fim')) {
+            $request->validate([
+                'data_inicio' => 'date|before_or_equal:data_fim',
+                'data_fim' => 'date|after_or_equal:data_inicio',
+            ], [
+                'data_inicio.before_or_equal' => 'A data inicial deve ser igual ou anterior à data final.',
+                'data_fim.after_or_equal' => 'A data final deve ser igual ou posterior à data inicial.'
+            ]);
+        }
+        
+        // Obtém as distribuições com suas instituições e contando baixas
+        $query = Distribuicao::with('instituicao')->withCount('baixas');
         
         // Filtro por instituição
-        if (request()->has('instituicao_id') && !empty(request('instituicao_id'))) {
-            $distribuicoes = $distribuicoes->filter(function ($distribuicao) {
-                return $distribuicao->instituicao_id == request('instituicao_id');
-            });
+        if ($request->filled('instituicao_id')) {
+            $query->where('instituicao_id', $request->instituicao_id);
         }
         
         // Filtro por tipo de certidão
-        if (request()->has('tipo_certidao') && !empty(request('tipo_certidao'))) {
-            $distribuicoes = $distribuicoes->filter(function ($distribuicao) {
-                return $distribuicao->tipo_certidao == request('tipo_certidao');
-            });
+        if ($request->filled('tipo_certidao')) {
+            $query->where('tipo_certidao', $request->tipo_certidao);
         }
+        
+        // Busca as distribuições
+        $distribuicoes = $query->get();
+        
+        // Filtra apenas aquelas que têm pendências
+        $distribuicoes = $distribuicoes->filter(function ($distribuicao) {
+            $totalNumeracao = ($distribuicao->numero_final - $distribuicao->numero_inicial) + 1;
+            return $distribuicao->baixas_count < $totalNumeracao;
+        });
         
         $instituicoes = Instituicao::orderBy('nome')->get();
         

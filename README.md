@@ -100,7 +100,7 @@ O sistema estará disponível em `http://localhost:8000`
 
 Após executar as seeds, você terá acesso com as seguintes credenciais:
 
-- **Email:** admin@example.com
+- **Email:** fiscal@example.com
 - **Senha:** password
 
 ## 🔒 Permissões

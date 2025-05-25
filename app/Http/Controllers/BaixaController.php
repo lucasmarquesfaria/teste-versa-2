@@ -204,6 +204,16 @@ class BaixaController extends Controller
             'observacao' => 'nullable|string',
         ]);
         
+        // Validação de prazo limite para devolução
+        $distribuicao = $baixa->distribuicao;
+        $prazoDias = 30; // Pode ser tornado configurável
+        $dataLimite = $distribuicao->data_entrega->copy()->addDays($prazoDias);
+        if (\Carbon\Carbon::parse($request->data_devolucao)->gt($dataLimite)) {
+            return back()
+                ->withInput()
+                ->withErrors(['data_devolucao' => 'A data de devolução excede o prazo limite de ' . $prazoDias . ' dias após a entrega da distribuição.']);
+        }
+        
         $baixa->update($validated);
         
         return redirect()
