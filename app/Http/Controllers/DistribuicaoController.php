@@ -37,15 +37,40 @@ class DistribuicaoController extends Controller
             $distribuicoes->whereDate('data_entrega', '<=', request('data_fim'));
         }
         
+        // Obter as instituições para o dropdown do filtro
+        $instituicoes = Instituicao::orderBy('nome')->get();
+        
+        // Carregar os relacionamentos e adicionar o withCount para contar as baixas
+        $distribuicoes = $distribuicoes->withCount('baixas')->orderBy('data_entrega', 'desc');
+
         // Filtro: apenas distribuições pendentes de devolução
+        // Primeiro, obtemos todos os IDs que precisamos consultar
         if (request()->has('pendentes') && request('pendentes')) {
-            $distribuicoes = $distribuicoes->where(function($q) {
-                return $q->quantidade_pendentes > 0;
+            // Executamos a consulta para obter todas as distribuições
+            $todasDistribuicoes = $distribuicoes->get();
+            
+            // Filtramos as distribuições com pendências
+            $distribuicoesComPendencias = $todasDistribuicoes->filter(function ($distribuicao) {
+                return $distribuicao->quantidade_pendentes > 0;
             });
+            
+            // Recuperamos os IDs para fazer uma nova consulta paginada
+            $ids = $distribuicoesComPendencias->pluck('id')->toArray();
+            
+            // Se não houver IDs, garantimos pelo menos um ID inexistente para que a consulta retorne vazia
+            if (empty($ids)) {
+                $ids = [0];
+            }
+            
+            // Criamos uma nova consulta apenas com os IDs filtrados
+            $distribuicoes = Distribuicao::with('instituicao')
+                ->withCount('baixas')
+                ->whereIn('id', $ids)
+                ->orderBy('data_entrega', 'desc');
         }
         
-        $instituicoes = Instituicao::orderBy('nome')->get();
-        $distribuicoes = $distribuicoes->orderBy('data_entrega', 'desc')->paginate(10);
+        // Aplicamos a paginação no final
+        $distribuicoes = $distribuicoes->paginate(10);
         
         return view('distribuicoes.index', compact('distribuicoes', 'instituicoes'));
     }
