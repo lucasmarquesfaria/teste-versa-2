@@ -25,7 +25,7 @@ Sistema desenvolvido para gerenciar a distribuição e controle de Declarações
   - Relatório de distribuições
   - Relatório de utilização
   - Relatório de disponibilidade
-  - Relatório de pendências
+  - Relatório de pendências.
 
 ## 🚀 Tecnologias
 
