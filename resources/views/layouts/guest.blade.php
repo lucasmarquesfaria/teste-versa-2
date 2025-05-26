@@ -24,7 +24,7 @@
                     <div class="mb-3">
                         <i class="fas fa-hospital-user text-6xl text-cyan-500"></i>
                     </div>
-                    <p class="text-xl font-medium text-cyan-600">Painel de Gestão da APS</p>
+                    <p class="text-xl font-medium text-cyan-600">Controle de Numeração</p>
                 </a>
             </div>
 
